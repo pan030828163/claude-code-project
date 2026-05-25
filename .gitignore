@@ -1,0 +1,9 @@
+# Thumbnails / generated assets
+.thumbnails/
+
+# Playwright MCP browser profiles
+.playwright-mcp/
+
+# OS files
+.DS_Store
+Thumbs.db

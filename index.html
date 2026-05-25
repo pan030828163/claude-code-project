@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Space Grotesk';
+      font-style: normal;
+      font-weight: 400 900;
+      font-display: swap;
+      src: url('fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+    }
+    /* === RESET & BASE === */
+    body {
+      margin: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #0A0E1A;
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #fff;
+    }
+    .scene {
+      position: absolute;
+      top: 0; left: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #0A0E1A;
+    }
+    #s1 { z-index: 7; }
+    #s2 { z-index: 6; opacity: 0; }
+    #s3 { z-index: 5; opacity: 0; }
+    #s4 { z-index: 4; opacity: 0; }
+    #s5 { z-index: 3; opacity: 0; }
+    #s6 { z-index: 2; opacity: 0; }
+    #s7 { z-index: 1; opacity: 0; }
+
+    .scene-content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      padding: 140px 80px;
+      gap: 20px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* === PERSISTENT BG: TECH GRID === */
+    .tech-grid {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(74,125,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,125,255,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .radial-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ghost-text {
+      position: absolute;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      color: #4A7DFF;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* === SHARED COMPONENTS === */
+    .section-label {
+      font-size: 28px;
+      font-weight: 400;
+      color: #8892B0;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+    .scene-title {
+      font-size: 80px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .accent-line {
+      width: 80px;
+      height: 4px;
+      background: #4A7DFF;
+      border-radius: 2px;
+    }
+    .accent-line-teal {
+      width: 80px;
+      height: 4px;
+      background: #00D4AA;
+      border-radius: 2px;
+    }
+    .mcp-brand {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      color: #4A7DFF;
+    }
+
+    /* === SCENE 1: HOOK === */
+    #s1 .ghost-mcp {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 400px;
+      font-weight: 900;
+      color: #4A7DFF;
+      opacity: 0.035;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+      letter-spacing: -0.04em;
+    }
+    #s1 .s1-content {
+      z-index: 1;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-bottom: 300px;
+    }
+    #s1 .s1-title {
+      font-size: 110px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.02em;
+    }
+    #s1 .s1-accent-line {
+      width: 100px;
+      height: 4px;
+      background: #4A7DFF;
+      border-radius: 2px;
+      margin: 0 0 24px 0;
+    }
+    #s1 .s1-subtitle {
+      font-size: 44px;
+      font-weight: 300;
+      color: #8892B0;
+      margin: 0 0 16px 0;
+      letter-spacing: 0.02em;
+    }
+    #s1 .s1-tagline {
+      font-size: 32px;
+      font-weight: 600;
+      color: #00D4AA;
+    }
+    #s1 .s1-tagline .highlight-box {
+      display: inline-block;
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid rgba(0, 212, 170, 0.25);
+      border-radius: 12px;
+      padding: 8px 24px;
+    }
+
+    /* === SCENE 2: PROBLEM === */
+    #s2 .s2-content {
+      z-index: 1;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+    #s2 .s2-label {
+      font-size: 26px;
+      font-weight: 400;
+      color: #8892B0;
+      margin-bottom: 20px;
+      letter-spacing: 0.03em;
+    }
+    #s2 .s2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    #s2 .problem-card {
+      background: rgba(20, 33, 61, 0.7);
+      border: 1px solid rgba(74, 125, 255, 0.12);
+      border-radius: 16px;
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    #s2 .problem-card .card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 16px;
+      color: #FF5A5A;
+      font-weight: 700;
+      font-family: "Space Grotesk", sans-serif;
+    }
+    #s2 .problem-card .card-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 6px 0;
+    }
+    #s2 .problem-card .card-desc {
+      font-size: 22px;
+      font-weight: 400;
+      color: #8892B0;
+      margin: 0;
+    }
+    #s2 .problem-card .x-mark {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: rgba(255, 90, 90, 0.3);
+    }
+
+    /* === SCENE 3: USB ANALOGY === */
+    #s3 .s3-content {
+      z-index: 1;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+    }
+    #s3 .s3-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    #s3 .s3-node {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #s3 .s3-node-brain {
+      background: rgba(74, 125, 255, 0.15);
+      border: 2px solid rgba(74, 125, 255, 0.3);
+    }
+    #s3 .s3-node-brain svg { width: 56px; height: 56px; }
+    #s3 .s3-node-plug {
+      background: rgba(0, 212, 170, 0.15);
+      border: 2px solid rgba(0, 212, 170, 0.3);
+    }
+    #s3 .s3-node-plug svg { width: 56px; height: 56px; }
+    #s3 .s3-connector {
+      flex: 1;
+      max-width: 260px;
+      height: 3px;
+      background: linear-gradient(90deg, #4A7DFF, #00D4AA);
+      border-radius: 2px;
+      position: relative;
+    }
+    #s3 .s3-connector::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: -5px;
+      width: 13px;
+      height: 13px;
+      background: #00D4AA;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+    }
+    #s3 .s3-connector::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: -5px;
+      width: 13px;
+      height: 13px;
+      background: #4A7DFF;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(74, 125, 255, 0.5);
+    }
+    #s3 .s3-label-brain { font-size: 18px; color: #8892B0; text-align: center; margin-top: 8px; }
+    #s3 .s3-label-plug { font-size: 18px; color: #8892B0; text-align: center; margin-top: 8px; }
+    #s3 .s3-hero {
+      font-size: 64px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      margin: 0;
+    }
+    #s3 .s3-hero .highlight-mcp {
+      color: #4A7DFF;
+      font-family: "Space Grotesk", sans-serif;
+    }
+    #s3 .s3-badges {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #s3 .s3-badge {
+      font-size: 22px;
+      padding: 8px 20px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #8892B0;
+      font-weight: 400;
+    }
+    #s3 .s3-badge.active {
+      color: #fff;
+      border-color: rgba(74, 125, 255, 0.3);
+      background: rgba(74, 125, 255, 0.1);
+    }
+
+    /* === SCENE 4: ARCHITECTURE === */
+    #s4 .s4-content {
+      z-index: 1;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
+    #s4 .s4-title {
+      font-size: 60px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.02em;
+    }
+    #s4 .arch-host {
+      width: 100%;
+      padding: 20px 28px;
+      background: rgba(74, 125, 255, 0.1);
+      border: 1.5px solid rgba(74, 125, 255, 0.25);
+      border-radius: 14px;
+      text-align: center;
+    }
+    #s4 .arch-host .host-title {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    #s4 .arch-host .host-desc {
+      font-size: 18px;
+      color: #8892B0;
+      margin-top: 4px;
+    }
+    #s4 .arch-connector {
+      width: 2px;
+      height: 24px;
+      background: linear-gradient(to bottom, rgba(74,125,255,0.4), rgba(74,125,255,0.1));
+      margin: 0 auto;
+    }
+    #s4 .arch-client {
+      width: 100%;
+      padding: 16px 24px;
+      background: rgba(124, 92, 252, 0.1);
+      border: 1.5px solid rgba(124, 92, 252, 0.25);
+      border-radius: 14px;
+      text-align: center;
+    }
+    #s4 .arch-client .client-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: #7C5CFC;
+    }
+    #s4 .arch-client .client-desc {
+      font-size: 18px;
+      color: #8892B0;
+    }
+    #s4 .arch-servers {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+    #s4 .arch-server {
+      flex: 1;
+      padding: 16px 12px;
+      background: rgba(20, 33, 61, 0.6);
+      border: 1px solid rgba(74, 125, 255, 0.12);
+      border-radius: 12px;
+      text-align: center;
+    }
+    #s4 .arch-server .svr-type {
+      font-size: 18px;
+      color: #8892B0;
+      margin-bottom: 4px;
+    }
+    #s4 .arch-server .svr-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+    #s4 .s4-capabilities {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      margin-top: 12px;
+    }
+    #s4 .cap-badge {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(0, 212, 170, 0.08);
+      border: 1px solid rgba(0, 212, 170, 0.15);
+    }
+    #s4 .cap-badge .cap-en {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #00D4AA;
+    }
+    #s4 .cap-badge .cap-cn {
+      font-size: 16px;
+      color: #8892B0;
+      margin-top: 2px;
+    }
+
+    /* === SCENE 5: FLOW === */
+    #s5 .s5-content {
+      z-index: 1;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+    #s5 .s5-title {
+      font-size: 60px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.02em;
+    }
+    #s5 .s5-note {
+      font-size: 20px;
+      color: #8892B0;
+      font-style: italic;
+    }
+    #s5 .flow-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+      margin-top: 10px;
+    }
+    #s5 .flow-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 16px;
+    }
+    #s5 .flow-node {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      background: rgba(20, 33, 61, 0.6);
+      border: 1px solid rgba(74, 125, 255, 0.12);
+      border-radius: 12px;
+      min-width: 280px;
+      flex-shrink: 0;
+    }
+    #s5 .flow-node .fn-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #4A7DFF;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(74, 125, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #s5 .flow-node .fn-text {
+      font-size: 24px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    #s5 .flow-arrow {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 24px;
+      color: rgba(74, 125, 255, 0.3);
+      flex-shrink: 0;
+      text-align: center;
+      margin: 0 auto;
+    }
+    #s5 .flow-arrow-down {
+      display: block;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 20px;
+      color: rgba(74, 125, 255, 0.3);
+      text-align: center;
+      padding: 4px 0;
+    }
+
+    /* === SCENE 6: APPLICATIONS === */
+    #s6 .s6-content {
+      z-index: 1;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+    #s6 .s6-title {
+      font-size: 60px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.02em;
+    }
+    #s6 .s6-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    #s6 .app-card {
+      padding: 24px 20px;
+      border-radius: 16px;
+      background: rgba(20, 33, 61, 0.5);
+      border: 1px solid rgba(74, 125, 255, 0.1);
+    }
+    #s6 .app-card .app-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    #s6 .app-card .app-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+    }
+    #s6 .app-card .app-examples {
+      font-size: 18px;
+      color: #8892B0;
+      line-height: 1.6;
+    }
+
+    /* === SCENE 7: OUTRO === */
+    #s7 .s7-content {
+      z-index: 1;
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      text-align: center;
+    }
+    #s7 .s7-close {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.3;
+      max-width: 700px;
+    }
+    #s7 .s7-cta {
+      font-size: 32px;
+      padding: 16px 40px;
+      border-radius: 100px;
+      background: rgba(74, 125, 255, 0.12);
+      border: 1.5px solid rgba(74, 125, 255, 0.3);
+      color: #4A7DFF;
+      font-weight: 600;
+      display: inline-block;
+    }
+    #s7 .s7-sub {
+      font-size: 24px;
+      color: #8892B0;
+    }
+    #s7 .s7-mcp {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 120px;
+      font-weight: 900;
+      color: rgba(74, 125, 255, 0.06);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    #s7 .s7-fade-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0A0E1A;
+      pointer-events: none;
+      z-index: 10;
+      opacity: 0;
+    }
+
+    /* === DECORATIVE DOTS === */
+    .deco-dots {
+      position: absolute;
+      bottom: 80px;
+      right: 80px;
+      z-index: 0;
+      opacity: 0.15;
+    }
+    .deco-dot {
+      width: 4px;
+      height: 4px;
+      background: #4A7DFF;
+      border-radius: 50%;
+      margin: 6px;
+      display: inline-block;
+    }
+
+    /* === CONNECTION LINES MOTIF === */
+    .conn-lines {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .conn-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(74,125,255,0.08), transparent);
+    }
+  </style>
+</head>
+<body>
+<div
+  data-composition-id="main"
+  data-width="1080"
+  data-height="1920"
+  data-start="0"
+  data-duration="46"
+>
+
+  <!-- ========== PERSISTENT BACKGROUND ========== -->
+  <div class="tech-grid" id="bg-grid"></div>
+  <div class="conn-lines" id="conn-lines">
+    <div class="conn-line" style="top:20%;width:100%;"></div>
+    <div class="conn-line" style="top:40%;width:80%;left:10%;"></div>
+    <div class="conn-line" style="top:60%;width:90%;left:5%;"></div>
+    <div class="conn-line" style="top:80%;width:70%;left:15%;"></div>
+  </div>
+
+  <!-- ========== SCENE 1: HOOK ========== -->
+  <div id="s1" class="scene">
+    <div class="radial-glow" id="s1-glow" style="width:600px;height:600px;background:rgba(74,125,255,0.08);top:30%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="ghost-mcp">MCP</div>
+    <div class="scene-content s1-content">
+      <div class="s1-title" id="s1-title">什么是 <span class="mcp-brand">MCP</span>？</div>
+      <div class="s1-accent-line" id="s1-line"></div>
+      <div class="s1-subtitle" id="s1-subtitle">Model Context Protocol</div>
+      <div class="s1-tagline" id="s1-tagline"><span class="highlight-box">AI 领域的 USB 接口</span></div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 2: PROBLEM ========== -->
+  <div id="s2" class="scene">
+    <div class="radial-glow" id="s2-glow" style="width:500px;height:500px;background:rgba(255,90,90,0.05);top:25%;left:-10%;"></div>
+    <div class="scene-content s2-content">
+      <div class="s2-label" id="s2-label">在 MCP 出现之前，AI 接入数据...</div>
+      <div class="s2-grid" id="s2-grid">
+        <div class="problem-card" id="card1">
+          <div class="x-mark" id="x1">✕</div>
+          <div class="card-icon">!</div>
+          <div class="card-title">各自为战</div>
+          <div class="card-desc">每个数据源需单独对接 API</div>
+        </div>
+        <div class="problem-card" id="card2">
+          <div class="x-mark" id="x2">✕</div>
+          <div class="card-icon">!</div>
+          <div class="card-title">重复造轮</div>
+          <div class="card-desc">集成代码反复写，维护成本高</div>
+        </div>
+        <div class="problem-card" id="card3">
+          <div class="x-mark" id="x3">✕</div>
+          <div class="card-icon">!</div>
+          <div class="card-title">框架绑架</div>
+          <div class="card-desc">抽象过重，商业化味道浓</div>
+        </div>
+        <div class="problem-card" id="card4">
+          <div class="x-mark" id="x4">✕</div>
+          <div class="card-icon">!</div>
+          <div class="card-title">生态孤岛</div>
+          <div class="card-desc">封闭插件，通用性差</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 3: USB ANALOGY ========== -->
+  <div id="s3" class="scene">
+    <div class="radial-glow" style="width:700px;height:700px;background:rgba(0,212,170,0.04);top:40%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="scene-content s3-content">
+      <div class="s3-diagram" id="s3-diagram">
+        <div style="text-align:center;">
+          <div class="s3-node s3-node-brain" id="s3-brain">
+            <svg viewBox="0 0 56 56" fill="none">
+              <path d="M28 8C20 8 16 14 16 20c0 8 6 12 6 12v4h12v-4s6-4 6-12c0-6-4-12-12-12z" stroke="#4A7DFF" stroke-width="2.5" fill="rgba(74,125,255,0.15)"/>
+              <path d="M22 36v4h12v-4" stroke="#4A7DFF" stroke-width="2" fill="none"/>
+              <path d="M26 26l-4-4m4 4l4-4M26 26v-6" stroke="#4A7DFF" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="s3-label-brain">AI 大模型</div>
+        </div>
+        <div class="s3-connector" id="s3-connector"></div>
+        <div style="text-align:center;">
+          <div class="s3-node s3-node-plug" id="s3-plug">
+            <svg viewBox="0 0 56 56" fill="none">
+              <rect x="16" y="8" width="24" height="40" rx="6" stroke="#00D4AA" stroke-width="2.5" fill="rgba(0,212,170,0.1)"/>
+              <rect x="22" y="30" width="12" height="12" rx="2" stroke="#00D4AA" stroke-width="1.5" fill="rgba(0,212,170,0.1)"/>
+              <line x1="22" y1="20" x2="34" y2="20" stroke="#00D4AA" stroke-width="1.5"/>
+              <line x1="22" y1="26" x2="34" y2="26" stroke="#00D4AA" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="s3-label-plug">MCP 协议</div>
+        </div>
+      </div>
+      <div class="s3-hero" id="s3-hero"><span class="highlight-mcp">MCP</span> = AI 的 USB 接口</div>
+      <div class="s3-badges" id="s3-badges">
+        <span class="s3-badge active">标准化连接</span>
+        <span class="s3-badge active">即插即用</span>
+        <span class="s3-badge active">通用协议</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 4: ARCHITECTURE ========== -->
+  <div id="s4" class="scene">
+    <div class="radial-glow" style="width:500px;height:500px;background:rgba(124,92,252,0.05);bottom:20%;right:-10%;"></div>
+    <div class="scene-content s4-content">
+      <div class="s4-title" id="s4-title">核心架构</div>
+      <div id="s4-host" class="arch-host">
+        <div class="host-title">MCP Host</div>
+        <div class="host-desc">Claude Desktop / Cursor / AI 工具</div>
+      </div>
+      <div class="arch-connector" id="s4-conn1"></div>
+      <div id="s4-client" class="arch-client">
+        <div class="client-title">MCP Client</div>
+        <div class="client-desc">与 Server 保持 1:1 连接</div>
+      </div>
+      <div class="arch-connector" id="s4-conn2"></div>
+      <div class="arch-servers" id="s4-servers">
+        <div class="arch-server" id="srv1">
+          <div class="svr-type">MCP Server</div>
+          <div class="svr-name">本地</div>
+        </div>
+        <div class="arch-server" id="srv2">
+          <div class="svr-type">MCP Server</div>
+          <div class="svr-name">远程</div>
+        </div>
+        <div class="arch-server" id="srv3">
+          <div class="svr-type">MCP Server</div>
+          <div class="svr-name">社区</div>
+        </div>
+      </div>
+      <div class="s4-capabilities" id="s4-caps">
+        <div class="cap-badge"><div class="cap-en">Resources</div><div class="cap-cn">资源</div></div>
+        <div class="cap-badge"><div class="cap-en">Tools</div><div class="cap-cn">工具</div></div>
+        <div class="cap-badge"><div class="cap-en">Prompts</div><div class="cap-cn">提示</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 5: FLOW ========== -->
+  <div id="s5" class="scene">
+    <div class="radial-glow" style="width:600px;height:600px;background:rgba(74,125,255,0.05);top:40%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="scene-content s5-content">
+      <div class="s5-title" id="s5-title">一次完整调用</div>
+      <div class="flow-container" id="flow-container">
+        <!-- Row 1: 1 → 2 -->
+        <div class="flow-row">
+          <div class="flow-node" id="fn1"><span class="fn-num">1</span><span class="fn-text">用户提问</span></div>
+          <div class="flow-arrow" id="fa1">→</div>
+          <div class="flow-node" id="fn2"><span class="fn-num">2</span><span class="fn-text">LLM 推理</span></div>
+        </div>
+        <div class="flow-arrow-down" id="fad1">↓</div>
+        <!-- Row 2: 3 → 4 -->
+        <div class="flow-row">
+          <div class="flow-node" id="fn3"><span class="fn-num">3</span><span class="fn-text">选择工具</span></div>
+          <div class="flow-arrow" id="fa2">→</div>
+          <div class="flow-node" id="fn4"><span class="fn-num">4</span><span class="fn-text">调用执行</span></div>
+        </div>
+        <div class="flow-arrow-down" id="fad2">↓</div>
+        <!-- Row 3: 5 → 6 -->
+        <div class="flow-row">
+          <div class="flow-node" id="fn5"><span class="fn-num">5</span><span class="fn-text">结果返回</span></div>
+          <div class="flow-arrow" id="fa3">→</div>
+          <div class="flow-node" id="fn6"><span class="fn-num">6</span><span class="fn-text">生成回答</span></div>
+        </div>
+      </div>
+      <div class="s5-note" id="s5-note">本质：MCP Server 描述 = System Prompt</div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 6: APPLICATIONS ========== -->
+  <div id="s6" class="scene">
+    <div class="radial-glow" style="width:500px;height:500px;background:rgba(0,212,170,0.04);top:30%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="scene-content s6-content">
+      <div class="s6-title" id="s6-title">能做什么？</div>
+      <div class="s6-grid" id="s6-grid">
+        <div class="app-card" id="ac1">
+          <div class="app-icon" style="background:rgba(74,125,255,0.12);color:#4A7DFF;">📁</div>
+          <div class="app-title">数据文件</div>
+          <div class="app-examples">文件系统 · 数据库 · Google Drive</div>
+        </div>
+        <div class="app-card" id="ac2">
+          <div class="app-icon" style="background:rgba(124,92,252,0.2);color:#b08aff;">🛠</div>
+          <div class="app-title">开发工具</div>
+          <div class="app-examples">Git · GitHub · Sentry</div>
+        </div>
+        <div class="app-card" id="ac3">
+          <div class="app-icon" style="background:rgba(0,212,170,0.12);color:#00D4AA;">🌐</div>
+          <div class="app-title">网络服务</div>
+          <div class="app-examples">搜索 · 浏览器 · 网页获取</div>
+        </div>
+        <div class="app-card" id="ac4">
+          <div class="app-icon" style="background:rgba(255,195,0,0.12);color:#FFC300;">⚡</div>
+          <div class="app-title">生产力</div>
+          <div class="app-examples">Slack · 地图 · 记忆系统</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 7: OUTRO ========== -->
+  <div id="s7" class="scene">
+    <div class="radial-glow" style="width:500px;height:500px;background:rgba(74,125,255,0.06);top:40%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="s7-mcp">MCP</div>
+    <div class="scene-content s7-content">
+      <div class="s7-close" id="s7-close">MCP 正在重新定义<br />AI 的连接方式</div>
+      <div class="s7-cta" id="s7-cta">去 Claude Desktop 体验 →</div>
+      <div class="s7-sub" id="s7-sub">Model Context Protocol · 开放标准协议</div>
+    </div>
+    <div class="s7-fade-overlay" id="s7-fade"></div>
+  </div>
+
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+
+// Ensure inactive scenes start at opacity 0 (prevents flash on loop/reset)
+tl.set("#s2, #s3, #s4, #s5, #s6, #s7", { opacity: 0 }, 0);
+
+// =====================================================
+// SCENE 1: HOOK (0s - 3.5s)
+// =====================================================
+tl.from("#bg-grid", { opacity: 0, duration: 1.5, ease: "power2.out" }, 0.2);
+tl.to("#s1-glow", { scale: 1.12, duration: 3, repeat: 0, yoyo: false, ease: "sine.inOut" }, 0.2);
+
+tl.fromTo("#s1-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "expo.out" }, 0.5);
+tl.fromTo("#s1-line", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", transformOrigin: "left center" }, 0.8);
+tl.fromTo("#s1-subtitle", { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 1.0);
+tl.fromTo("#s1-tagline", { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 1.3);
+
+// =====================================================
+// TRANSITION 1→2: Crossfade at 3.5s (0.5s)
+// =====================================================
+tl.to("#s1", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 3.5);
+tl.to("#s2", { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 3.5);
+
+// =====================================================
+// SCENE 2: PROBLEM (4.0s - 9.0s)
+// =====================================================
+tl.to("#s2-glow", { scale: 1.08, duration: 4, repeat: 0, ease: "sine.inOut" }, 4.0);
+
+tl.fromTo("#s2-label", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 4.2);
+
+tl.fromTo("#card1", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 4.6);
+tl.fromTo("#card2", { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 4.7);
+tl.fromTo("#card3", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 4.8);
+tl.fromTo("#card4", { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 4.9);
+
+tl.fromTo("#x1", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 5.5);
+tl.fromTo("#x2", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 5.6);
+tl.fromTo("#x3", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 5.7);
+tl.fromTo("#x4", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 5.8);
+
+// =====================================================
+// TRANSITION 2→3: Crossfade at 9.0s
+// =====================================================
+tl.to("#s2", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 9.0);
+tl.to("#s3", { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 9.0);
+
+// =====================================================
+// SCENE 3: USB ANALOGY (9.5s - 15.0s)
+// =====================================================
+tl.fromTo("#s3-brain", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 9.8);
+tl.fromTo("#s3-plug", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 9.8);
+tl.fromTo("#s3-connector", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.6, ease: "power2.out", transformOrigin: "left center" }, 10.3);
+
+tl.fromTo("#s3-hero", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 10.8);
+
+tl.fromTo("#s3-badges .s3-badge", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out", stagger: 0.1 }, 11.3);
+
+// Ambient: connector pulse
+tl.to("#s3-connector", { opacity: 0.5, duration: 1.5, repeat: 2, yoyo: true, ease: "sine.inOut" }, 10.9);
+
+// =====================================================
+// TRANSITION 3→4: Crossfade at 15.0s
+// =====================================================
+tl.to("#s3", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 15.0);
+tl.to("#s4", { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 15.0);
+
+// =====================================================
+// SCENE 4: ARCHITECTURE (15.5s - 22.0s)
+// =====================================================
+tl.fromTo("#s4-title", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 15.8);
+
+tl.fromTo("#s4-host", { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 16.2);
+tl.fromTo("#s4-conn1", { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.3, ease: "power2.out", transformOrigin: "top center" }, 16.6);
+tl.fromTo("#s4-client", { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 16.8);
+tl.fromTo("#s4-conn2", { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.3, ease: "power2.out", transformOrigin: "top center" }, 17.2);
+
+tl.fromTo("#srv1", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 17.6);
+tl.fromTo("#srv2", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 17.8);
+tl.fromTo("#srv3", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 18.0);
+
+tl.fromTo("#s4-caps .cap-badge", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power2.out", stagger: 0.1 }, 18.5);
+
+// =====================================================
+// TRANSITION 4→5: Crossfade at 22.0s
+// =====================================================
+tl.to("#s4", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 22.0);
+tl.to("#s5", { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 22.0);
+
+// =====================================================
+// SCENE 5: FLOW (22.5s - 31.0s)
+// =====================================================
+tl.fromTo("#s5-title", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 22.8);
+
+// Flow nodes staggered
+tl.fromTo("#fn1", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.5)" }, 23.3);
+tl.fromTo("#fn2", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.5)" }, 23.6);
+tl.fromTo("#fa1", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.3, ease: "power2.out", transformOrigin: "left center" }, 23.5);
+
+tl.fromTo("#fad1", { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.3, ease: "power2.out", transformOrigin: "top center" }, 23.9);
+
+tl.fromTo("#fn3", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.5)" }, 24.2);
+tl.fromTo("#fn4", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.5)" }, 24.5);
+tl.fromTo("#fa2", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.3, ease: "power2.out", transformOrigin: "left center" }, 24.4);
+
+tl.fromTo("#fad2", { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.3, ease: "power2.out", transformOrigin: "top center" }, 24.8);
+
+tl.fromTo("#fn5", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.5)" }, 25.1);
+tl.fromTo("#fn6", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.5)" }, 25.4);
+tl.fromTo("#fa3", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.3, ease: "power2.out", transformOrigin: "left center" }, 25.3);
+
+tl.fromTo("#s5-note", { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 26.5);
+
+// =====================================================
+// TRANSITION 5→6: Crossfade at 31.0s
+// =====================================================
+tl.to("#s5", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 31.0);
+tl.to("#s6", { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 31.0);
+
+// =====================================================
+// SCENE 6: APPLICATIONS (31.5s - 38.0s)
+// =====================================================
+tl.fromTo("#s6-title", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 31.8);
+
+// Cards from 4 corners
+tl.fromTo("#ac1", { x: -40, y: 30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 32.2);
+tl.fromTo("#ac2", { x: 40, y: 30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 32.35);
+tl.fromTo("#ac3", { x: -40, y: -30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 32.5);
+tl.fromTo("#ac4", { x: 40, y: -30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 32.65);
+
+// Examples within cards
+tl.fromTo("#ac1 .app-examples", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 33.5);
+tl.fromTo("#ac2 .app-examples", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 33.6);
+tl.fromTo("#ac3 .app-examples", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 33.7);
+tl.fromTo("#ac4 .app-examples", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 33.8);
+
+// =====================================================
+// TRANSITION 6→7: Crossfade at 38.0s
+// =====================================================
+tl.to("#s6", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 38.0);
+tl.to("#s7", { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 38.0);
+
+// =====================================================
+// SCENE 7: OUTRO (38.5s - 46.0s)
+// =====================================================
+tl.fromTo("#s7-close", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }, 38.8);
+tl.fromTo("#s7-cta", { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 40.0);
+tl.fromTo("#s7-sub", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 40.5);
+
+// =====================================================
+// FINAL FADE TO BLACK (44.0s - 46.0s)
+// =====================================================
+tl.to("#s7-fade", { opacity: 1, duration: 2.0, ease: "power2.in" }, 44.0);
+
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

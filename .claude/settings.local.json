@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_run_code_unsafe",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_close",
+      "Bash(npx skills *)",
+      "Bash(npx hyperframes *)",
+      "Bash(curl -s \"https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&display=swap\")",
+      "Bash(curl -sL -o \"SpaceGrotesk-Variable.woff2\" \"https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2\")",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=0.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t0.png\")",
+      "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=5.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t5.png\")",
+      "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=12.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t12.png\")",
+      "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=20.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t20.png\")",
+      "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=28.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t28.png\")",
+      "WebFetch(domain:skills.sh)"
+    ]
+  }
+}
