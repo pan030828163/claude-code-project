@@ -20,7 +20,32 @@
       "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=12.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t12.png\")",
       "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=20.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t20.png\")",
       "Bash(curl -sL \"http://localhost:3002/api/projects/Claude%20Code/thumbnail/index.html?t=28.000&format=png&v=1\" -o \"J:/Claude Code/Claude Code/capture-t28.png\")",
-      "WebFetch(domain:skills.sh)"
+      "WebFetch(domain:skills.sh)",
+      "WebFetch(domain:api.github.com)",
+      "WebSearch",
+      "Bash(npm --version)",
+      "Bash(where claude *)",
+      "Bash(powershell *)",
+      "Bash(\"J:/Claude Code/Claude Code/tools/ExcelMcp/ExcelMcp-MCP-Server-1.8.64-windows.zip\" -c \"7z t \\\\\"J:/Claude Code/Claude Code/tools/ExcelMcp/ExcelMcp-MCP-Server-1.8.64-windows.zip\\\\\"\")",
+      "Bash(unzip -t \"J:/Claude Code/Claude Code/tools/ExcelMcp/ExcelMcp-MCP-Server-1.8.64-windows.zip\")",
+      "Bash(curl -sL \"https://api.github.com/repos/sbroenne/mcp-server-excel/releases/latest\")",
+      "Bash(curl -v -L --connect-timeout 30 --max-time 600 -o \"J:/Claude Code/Claude Code/tools/ExcelMcp/ExcelMcp-MCP-Server-1.8.66-windows.zip\" \"https://github.com/sbroenne/mcp-server-excel/releases/download/v1.8.66/ExcelMcp-MCP-Server-1.8.66-windows.zip\")",
+      "Bash(gh release *)",
+      "Bash(unzip -t \"J:/Claude Code/Claude Code/tools/ExcelMcp/ExcelMcp-MCP-Server-1.8.66-windows.zip\")",
+      "Bash(unzip *)",
+      "WebFetch(domain:github.com)",
+      "Bash(claude mcp *)",
+      "mcp__excel-mcp__file",
+      "mcp__excel-mcp__window",
+      "mcp__excel-mcp__worksheet",
+      "mcp__excel-mcp__range",
+      "mcp__excel-mcp__calculation_mode",
+      "mcp__excel-mcp__range_format",
+      "mcp__excel-mcp__table",
+      "mcp__excel-mcp__screenshot",
+      "mcp__excel-mcp__table_column",
+      "mcp__excel-mcp__chart",
+      "mcp__excel-mcp__chart_config"
     ]
   }
 }
